@@ -1,15 +1,11 @@
 const fs = require("fs");
 const path = require("path");
-const axios = require("axios");
-const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const express = require('express');
 const jwt = require("jsonwebtoken");
-const date = require("date-and-time");
 const validator = require("validator");
 const io = require("../socket/socket");
 const otpGenerator = require("otp-generator");
-const { generateID } = require("generate-unique-id");
 const router = express.Router()
 const mongoose = require('mongoose');
 
@@ -145,7 +141,7 @@ router.post('/user_account_verification/:', async (req, res, next) => {
 // Used to post a message to the database
 router.post('/create_message/:room_Id', async (req, res, next) => {
 
-    const { room_Id, message } = req.body;
+    const { message } = req.body;
     const { room_Id } = req.params;
     try {
         const errors = [];
@@ -182,7 +178,7 @@ router.post('/create_message/:room_Id', async (req, res, next) => {
         return res.status(200).json({
             ...createdMessage._doc,
             _id: createdMessage._id.toString(),
-          
+
         })
     }
     catch (error) {
@@ -270,18 +266,20 @@ router.post('/user_login', async (req, res, next) => {
             refreshToken: refreshToken,
             token: accessToken,
             userId: user._id.toString(),
-        }).catch(next)
-            .then(user => {
-                if (user && typeof user.log == 'function') {
-                    const data = {
-                        action: 'user-login',
-                        category: 'users',
-                        createdBy: user._id,
-                        message: 'User logged in'
-                    },
-                    return user.log(data)
-                }
-            })
+        })
+
+        //     .catch(next)
+        //         .then(user => {
+        //             if (user && typeof user.log == 'function') {
+        //                 const data = {
+        //                     action: 'user-login',
+        //                     category: 'users',
+        //                     createdBy: user._id,
+        //                     message: 'User logged in'
+        //                 },
+        //                 return user.log(data)
+        //             }
+        //         })
     }
     catch (error) {
 
@@ -292,26 +290,26 @@ router.post('/user_login', async (req, res, next) => {
 
 //logout of users
 router.post('/sh_logout', async (req, res, next) => {
-   
+
     try {
         const userInformation = await User.findById(req.userId);
         if (!userInformation) {
             const error = new Error("Something is wrong try again");
             error.code = 404;
             throw error;
-          }
-  
-      await SH_Hotel_Token.findOneAndDelete({
-        sh_refresh_token: sh_refresh_token,
-        sh_user_id: req.userId,
-      });
-      return res.status(200).json({ status: true })
+        }
+
+        await SH_Hotel_Token.findOneAndDelete({
+            sh_refresh_token: sh_refresh_token,
+            sh_user_id: req.userId,
+        });
+        return res.status(200).json({ status: true })
     }
     catch (error) {
-      res.json({ message: error.message, status: error.code })
-      next()
+        res.json({ message: error.message, status: error.code })
+        next()
     }
-  });
+});
 
 router.get('/messages/:room_Id', async (req, res, next) => {
     const { room_Id } = req.params;
@@ -368,7 +366,7 @@ router.get('/all_rooms', async (req, res, next) => {
     try {
         const errors = []
         const channelInformation = await Room_Channel.find()
-        .populate("message_information");
+            .populate("message_information");
         if (!channelInformation) {
             const error = new Error("No rooms available at the moment. Please try again.");
             error.data = errors;
@@ -396,7 +394,7 @@ router.get('/room/:room_Id', async (req, res, next) => {
     try {
         const errors = []
         const channelInformation = await Message.findById(room_Id)
-        .populate("message_information");
+            .populate("message_information");
         if (!channelInformation) {
             const error = new Error("No room information available at the moment. Please try again.");
             error.data = errors;

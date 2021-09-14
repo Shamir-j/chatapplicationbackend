@@ -6,12 +6,12 @@ const mongoose = require('mongoose');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const route = require('./routes/router');
-const auth = require('./middleware/auth');
+const auth = require('./midddleware/auth');
 // const logger = require('./logger')
 const httpLogger = require('./httpLogger')
-const mongoose = require('mongoose')
 
-mongoose.plugin(require('./app/utils/diff-plugin'))
+
+mongoose.plugin(require('./util/diff-plugin'))
 
 
 require('dotenv').config()
@@ -30,27 +30,6 @@ app.use(mongoSanitize());
 
 app.use(cors());
 
-// //Local storage of files
-const fileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'images');
-    },
-    filename: (req, file, cb) => {
-        console.log(file);
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-const fileFilter = (req, file, cb) => {
-    if (
-        file.mimetype === 'image/png' ||
-        file.mimetype === 'image/jpg' ||
-        file.mimetype === 'image/jpeg'
-    ) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
 
 
 app.use("/images", express.static(path.join(__dirname, "images")));
@@ -133,8 +112,8 @@ app.use((error, req, res, next) => {
 mongoose.connect(
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@smarthotel.i3gmt.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
+    // useCreateIndex: true,
+    // useFindAndModify: false,
     useUnifiedTopology: true,
     autoIndex: true
 })

@@ -1,6 +1,6 @@
 const _ = require('lodash')
-const LogSchema = require('../models/log')
-const { getDiff } = require('../utils/diff')
+const LogSchema = require('../models/mongolog')
+const { getDiff } = require('../util/diff')
 
 const plugin = function (schema) {
     schema.post('init', doc => {
