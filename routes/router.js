@@ -290,6 +290,29 @@ router.post('/user_login', async (req, res, next) => {
     }
 });
 
+//logout of users
+router.post('/sh_logout', async (req, res, next) => {
+   
+    try {
+        const userInformation = await User.findById(req.userId);
+        if (!userInformation) {
+            const error = new Error("Something is wrong try again");
+            error.code = 404;
+            throw error;
+          }
+  
+      await SH_Hotel_Token.findOneAndDelete({
+        sh_refresh_token: sh_refresh_token,
+        sh_user_id: req.userId,
+      });
+      return res.status(200).json({ status: true })
+    }
+    catch (error) {
+      res.json({ message: error.message, status: error.code })
+      next()
+    }
+  });
+
 router.get('/messages/:room_Id', async (req, res, next) => {
     const { room_Id } = req.params;
     try {
