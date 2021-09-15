@@ -2,9 +2,6 @@ let { format } = require('winston')
 const winston = require("winston")
 require("winston-mongodb")
 
-
-
-
 const options = {
   file: {
     level: 'info',
@@ -27,7 +24,7 @@ const options = {
     colorize: true,
   },
   mongo: {
-    level: 'error',
+    level: 'info',
     db: "mongodb+srv://smarthotelSystemUser:Hx0meBXMo2RjawLb@smarthotel.i3gmt.mongodb.net/realtimechat_database?retryWrites=true&w=majority",
     options: {
       useNewUrlParser: true,
