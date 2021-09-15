@@ -9,7 +9,7 @@ const route = require('./routes/router');
 const auth = require('./midddleware/auth');
 const logger = require('./util/logger')
 const httpLogger = require('./httpLogger')
-
+const http = require('http')
 
 mongoose.plugin(require('./util/diff-plugin'))
 
@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 
 
 
-app.use((req, res, next => {
+app.get((req, res, next => {
     logger.info(req.body);
     let oldSend = res.send;
     res.send = function (data) {
