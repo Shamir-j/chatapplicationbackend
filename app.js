@@ -57,18 +57,6 @@ app.use((req, res, next) => {
     next();
 })
 
-// app.get((req, res, next => {
-//     logger.info(req.body);
-//     let oldSend = res.send;
-//     res.send = function (data) {
-//         logger.info(JSON.parse(data));
-//         oldSend.apply(res, arguments);
-//     }
-//     next();
-// }));
-// const mongoose = require('mongoose')
-
-// mongoose.plugin(require('./app/utils/diff-plugin'))
 
 const router = express.Router();
 
@@ -77,36 +65,12 @@ app.use(auth);
 module.exports = router;
 
 
-
 app.use(route);
 
 
-
-
-
-
-app.get('/', (req, res, next) => {
-    res.status(200).send('Hello World!')
-})
-
-// app.get('/boom', (req, res, next) => {
-//   try {
-//     throw new Error('Wowza!')
-//   } catch (error) {
-//     logger.error('Whooops! This broke with error: ', error)
-//     res.status(500).send('Error!')
-//   }
+// app.get('/', (req, res, next) => {
+//     res.status(200).send('Hello World!')
 // })
-
-// app.get('/errorhandler', (req, res, next) => {
-//   try {
-//     throw new Error('Wowza!')
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
-
 
 app.use(logErrors);
 

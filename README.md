@@ -7,7 +7,7 @@ Chat Application Server Built on Express.js, RestAPI, MongoDb.
 <li>The server url is in the format below for the RESTAPI:
 
 ```
-
+https://realtimechatappbackend.herokuapp.com/
 ```
 
 </li>
@@ -54,7 +54,7 @@ You can run it locally(if you have the data collection in your machine)  and onl
 ##### Locally
 
 ```bash
-$ git clone https://github.com/zaam-inc/smarthotelserver.git     #clone the git repo
+$ git clone https://github.com/Shamir-j/chatapplicationbackend.git     #clone the git repo
 $ cd smarthotelserver   #change directory 
 $ npm install     #Install app dependencies
 $ sudo service mongod start  #start mongo service
@@ -63,7 +63,7 @@ $ npm run start:dev     #run the app
 
 ### On Windows
 ```powershell
-$ git clone https://github.com/zaam-inc/smarthotelserver.git     #clone the git repo                        
+$ git clone https://github.com/Shamir-j/chatapplicationbackend.git     #clone the git repo                        
 $ cd smarthotelserver   #change directory
 $ npm install     #Install app dependencies
 $ net start MongoDB  #start mongo service
@@ -72,7 +72,7 @@ $ npm run start:dev      #run the app
 
 
 
-Click [here](https://smarthotel2server.herokuapp.com) for testing Graphql Server
+Click [here](https://realtimechatappbackend.herokuapp.com/) for testing Graphql Server
 
 
 Have Fun!
