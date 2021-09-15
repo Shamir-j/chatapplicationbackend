@@ -277,55 +277,10 @@ router.post('/user_login', async (req, res, next) => {
             },
             "amjustsomewheretyingtomakemistakeslifeisfullofstruggles",
             { expiresIn: "30m" });
-
-        // exports.updateUser = (req, res, next) => {
-        //     return User.findById(req.params.id)
-        //         .then(user => {
-        //             if (!user)
-        //                 throw new Error('Target user does not exist. Failed to update.')
-        //             const { name } = req.body
-        //             if (name) user.name = name
-        //             return user.save()
-        //         })
-        //         .then(result => {
-        //             res.json(result)
-        //             return result
-        //         })
-        //         .catch(next)
-        //         .then(user => {
-        //             if (user && typeof user.log === 'function') {
-        //                 const data = {
-        //                     action: 'update-user',
-        //                     category: 'users',
-        //                     createdBy: req.user.id,
-        //                     message: 'Updated user name',
-        //                 }
-        //                 return user.log(data)
-        //             }
-        //         }).catch(err => {
-        //             console.log('Caught error while logging: ', err)
-        //         })
-        // }
-
-
-
         return res.status(200).json({
             token: accessToken,
             userId: user._id.toString(),
         })
-
-        //     .catch(next)
-        //         .then(user => {
-        //             if (user && typeof user.log == 'function') {
-        //                 const data = {
-        //                     action: 'user-login',
-        //                     category: 'users',
-        //                     createdBy: user._id,
-        //                     message: 'User logged in'
-        //                 },
-        //                 return user.log(data)
-        //             }
-        //         })
     }
     catch (error) {
 
