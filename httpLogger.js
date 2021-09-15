@@ -8,7 +8,7 @@ const format = json({
   responseTime: ':response-time'
 })
 
-// const logger = require('./logger')
+const logger = require('./util/logger')
 const httpLogger = morgan(format, {
   stream: {
     write: (message) => {

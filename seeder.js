@@ -2,6 +2,8 @@ const seeder = require("mongoose-seed")
 const Room_Channel = require('./models/rooms');
 const db = "mongodb+srv://smarthotelSystemUser:Hx0meBXMo2RjawLb@smarthotel.i3gmt.mongodb.net/realtimechat_database?retryWrites=true&w=majority"
 
+
+
 seeder.connect(db, function () {
 
     // Load Mongoose models
@@ -29,22 +31,22 @@ const room_data = [
         'model': 'Room_Channel',
         'documents': [
             {
-                'sh_hotel_permission_name': 'Create_Hotel',
-                'sh_hotel_permission_name_prefex': 'Register Hotel'
+                'chat_channel_name': 'Business',
+
             },
             {
-                'sh_hotel_permission_name': 'Update_Hotel',
-                'sh_hotel_permission_name_prefex': 'Update Hotel'
+                'chat_channel_name': 'Technology',
+
             },
             {
-                'sh_hotel_permission_name': 'View_Hotel',
-                'sh_hotel_permission_name_prefex': 'View Hotel Details'
+                'chat_channel_name': 'Sports',
+
             },
             {
-                'sh_hotel_permission_name': 'Create_Restaurant',
-                'sh_hotel_permission_name_prefex': 'Create Restaurant'
+                'chat_channel_name': 'General Chat',
+
             },
-           
+
         ]
     }
 ];

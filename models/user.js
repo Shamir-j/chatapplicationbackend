@@ -17,6 +17,14 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    user_account_verification_code: {
+        type: String,
+        required: false
+    },
+    user_account_verification_code_expiry_date: {
+        type: Date,
+        required: false
+    },
     user_created_at: {
         type: Date,
         required: true,
