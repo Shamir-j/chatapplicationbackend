@@ -1,4 +1,4 @@
-# SMART HOTEL SERVER
+# REALTIME CHAT APPLICATION
 Chat Application Server Built on Express.js, RestAPI, MongoDb. 
 
 ### Documentation
@@ -14,7 +14,6 @@ Chat Application Server Built on Express.js, RestAPI, MongoDb.
 
 </ul>
 
-##Business Requirements
 ### Business Requirements
  <ul>
 <li>Real time chatting using socket io</li>
@@ -26,8 +25,7 @@ Chat Application Server Built on Express.js, RestAPI, MongoDb.
 </ul>
 
 
-##Achieved Business Requirements
-###Achieved Business Requirements
+### Achieved Business Requirements
 <ul>
 <li> Integration of socket io to allow real time communication or chatting of customers. The customer select which Room to chat with after log in. After login all room are made vailable for the user to select one.</li>
 <li> User are required to sign up. Due to the minimal version of the application. account verification has been left oiptional no need for a verified account</li>
@@ -41,8 +39,6 @@ Chat Application Server Built on Express.js, RestAPI, MongoDb.
 </ul>
 
 
-
-##Installation
 ### Requirements
 
 
@@ -57,7 +53,6 @@ You can run it locally(if you have the data collection in your machine)  and onl
 
 ##### Locally
 
-######On Linux
 ```bash
 $ git clone https://github.com/zaam-inc/smarthotelserver.git     #clone the git repo
 $ cd smarthotelserver   #change directory 
@@ -66,7 +61,7 @@ $ sudo service mongod start  #start mongo service
 $ npm run start:dev     #run the app
 ```
 
-######On Windows
+### On Windows
 ```powershell
 $ git clone https://github.com/zaam-inc/smarthotelserver.git     #clone the git repo                        
 $ cd smarthotelserver   #change directory
