@@ -47,16 +47,25 @@ app.use((req, res, next) => {
     next();
 });
 
-
-
-app.get((req, res, next => {
+app.use((req, res, next) => {
     logger.info(req.body);
     let oldSend = res.send;
     res.send = function (data) {
         logger.info(JSON.parse(data));
         oldSend.apply(res, arguments);
     }
-}));
+    next();
+})
+
+// app.get((req, res, next => {
+//     logger.info(req.body);
+//     let oldSend = res.send;
+//     res.send = function (data) {
+//         logger.info(JSON.parse(data));
+//         oldSend.apply(res, arguments);
+//     }
+//     next();
+// }));
 // const mongoose = require('mongoose')
 
 // mongoose.plugin(require('./app/utils/diff-plugin'))
