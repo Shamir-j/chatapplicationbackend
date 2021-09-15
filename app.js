@@ -51,7 +51,7 @@ app.use((req, res, next) => {
     logger.info(req.body);
     let oldSend = res.send;
     res.send = function (data) {
-        logger.info(JSON.parse(data));
+        logger.info(data);
         oldSend.apply(res, arguments);
     }
     next();
