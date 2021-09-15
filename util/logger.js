@@ -31,10 +31,7 @@ const options = {
     db: "mongodb+srv://smarthotelSystemUser:Hx0meBXMo2RjawLb@smarthotel.i3gmt.mongodb.net/realtimechat_database?retryWrites=true&w=majority",
     options: {
       useNewUrlParser: true,
-      // useCreateIndex: true,
-      // useFindAndModify: false,
       useUnifiedTopology: true,
-      autoIndex: true
     },
     collection: 'systemlog',
     format: format.combine(format.timestamp(), format.json()),
