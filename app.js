@@ -7,7 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const route = require('./routes/router');
 const auth = require('./midddleware/auth');
-// const logger = require('./logger')
+const logger = require('./util/logger')
 const httpLogger = require('./httpLogger')
 
 
@@ -69,7 +69,7 @@ app.use(route);
 
 
 app.get('/', (req, res, next) => {
-  res.status(200).send('Hello World!')
+    res.status(200).send('Hello World!')
 })
 
 // app.get('/boom', (req, res, next) => {
@@ -95,12 +95,12 @@ app.use(logErrors);
 
 app.use(errorHandler);
 
-function logErrors (err, req, res, next) {
-  console.error(err.stack)
-  next(err)
+function logErrors(err, req, res, next) {
+    console.error(err.stack)
+    next(err)
 }
-function errorHandler (err, req, res, next) {
-  res.status(500).send('Error!')
+function errorHandler(err, req, res, next) {
+    res.status(500).send('Error!')
 }
 
 app.use((error, req, res, next) => {
@@ -119,6 +119,11 @@ mongoose.connect(
     useUnifiedTopology: true,
     autoIndex: true
 })
+    // const port = 3000
+    // app.listen(port, () => {
+    //     console.log(`listening at http://localhost:${port}`)
+    //     logger.log('info', `Your server available at http://localhost:${port}`)
+    // })
     .then(result => {
         const port = process.env.PORT || 3000;
         const server = require('http').createServer(app);
@@ -128,9 +133,17 @@ mongoose.connect(
             console.log('Client connected');
             console.log(socket.id)
             io.emit('transfer_init', 'User connected')
+
+            socket.on('disconnect', () => {
+                console.log('Client disconnected');
+                console.log(socket.id)
+                io.emit('transfer_init', 'User disconnected')
+            })
         });
+
         server.listen(port);
         console.log(`Your server available at http://localhost:${port}`)
+        logger.log('info', `Your server available at http://localhost:${port}`)
     })
     .catch(err => console.log(err));
 

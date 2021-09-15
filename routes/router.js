@@ -78,65 +78,65 @@ router.post('/create_user', async (req, res, next) => {
     }
 });
 
-router.post('/user_account_verification/:', async (req, res, next) => {
+// router.post('/user_account_verification/:', async (req, res, next) => {
 
-    const { user_email_address, user_password, user_full_name } = req.body;
-    try {
-        const errors = [];
-        if (!validator.isEmail(user_email_address)) {
-            errors.push({ message: "Please enter a valid email ddress." });
-        }
+//     const { user_email_address, user_password, user_full_name } = req.body;
+//     try {
+//         const errors = [];
+//         if (!validator.isEmail(user_email_address)) {
+//             errors.push({ message: "Please enter a valid email ddress." });
+//         }
 
-        if (validator.isEmpty(user_password) || !validator.isLength(user_password, { min: 8 })) {
-            errors.push({ message: "Please enter a valid password." });
-        }
-        if (validator.isEmpty(user_full_name)) {
-            errors.push({ message: "Please enter your full name." });
-        }
-        if (errors.length > 0) {
-            const error = new Error("Invalid inputs.");
-            error.data = errors;
-            error.code = 400;
-            throw error;
-        }
-        const existingUser = await User.findOne({ user_email_address: user_email_address });
-        if (existingUser) {
-            const error = new Error("This email address is already in use.");
-            error.data = errors;
-            error.code = 400;
-            throw error;
-        }
-        const one_time_password = otpGenerator.generate(4, {
-            bold: true,
-            upperCase: false,
-            specialChars: false,
-            alphabets: false,
-            specialChar: false,
-        });
-        const hashedPw = await bcrypt.hash(user_password, 12);
-        const user = new User({
-            user_email_address: user_email_address,
-            user_password: hashedPw,
-            user_full_name: user_full_name,
-            user_is_account_verified: false,
-            user_account_verification_code: one_time_password,
-            user_account_verification_code_expiry_date: Date.now() + 3600000,
-        });
-        const createdUser = await user.save();
+//         if (validator.isEmpty(user_password) || !validator.isLength(user_password, { min: 8 })) {
+//             errors.push({ message: "Please enter a valid password." });
+//         }
+//         if (validator.isEmpty(user_full_name)) {
+//             errors.push({ message: "Please enter your full name." });
+//         }
+//         if (errors.length > 0) {
+//             const error = new Error("Invalid inputs.");
+//             error.data = errors;
+//             error.code = 400;
+//             throw error;
+//         }
+//         const existingUser = await User.findOne({ user_email_address: user_email_address });
+//         if (existingUser) {
+//             const error = new Error("This email address is already in use.");
+//             error.data = errors;
+//             error.code = 400;
+//             throw error;
+//         }
+//         const one_time_password = otpGenerator.generate(4, {
+//             bold: true,
+//             upperCase: false,
+//             specialChars: false,
+//             alphabets: false,
+//             specialChar: false,
+//         });
+//         const hashedPw = await bcrypt.hash(user_password, 12);
+//         const user = new User({
+//             user_email_address: user_email_address,
+//             user_password: hashedPw,
+//             user_full_name: user_full_name,
+//             user_is_account_verified: false,
+//             user_account_verification_code: one_time_password,
+//             user_account_verification_code_expiry_date: Date.now() + 3600000,
+//         });
+//         const createdUser = await user.save();
 
-        return res.status(200).json({
-            _id: createdUser._id.toString(),
-            user_full_name: createdUser.user_full_name,
-            user_email_address: createdUser.user_email_address,
-            user_user_name: createdUser.user_user_name,
-            user_account_verification_code: createdUser.user_account_verification_code,
-        })
-    }
-    catch (error) {
-        res.json({ message: error.message, status: error.code })
-        next()
-    }
-});
+//         return res.status(200).json({
+//             _id: createdUser._id.toString(),
+//             user_full_name: createdUser.user_full_name,
+//             user_email_address: createdUser.user_email_address,
+//             user_user_name: createdUser.user_user_name,
+//             user_account_verification_code: createdUser.user_account_verification_code,
+//         })
+//     }
+//     catch (error) {
+//         res.json({ message: error.message, status: error.code })
+//         next()
+//     }
+// });
 
 // Used to post a message to the database
 router.post('/create_message/:room_Id', async (req, res, next) => {
@@ -175,7 +175,13 @@ router.post('/create_message/:room_Id', async (req, res, next) => {
         userInformation.user_messages_information.push(createdMessage);
         await userInformation.save();
         await roomInformation.save();
-
+        io.getIO(roomInformation._id).emit('message', {
+            action: 'create',
+            category: {
+                ...createdMessage._doc,
+                _id: createdMessage._id.toString(),
+            }
+        });
         return res.status(200).json({
             ...createdMessage._doc,
             _id: createdMessage._id.toString(),
@@ -209,7 +215,13 @@ router.post('/create_room', async (req, res, next) => {
 
         });
         const createdRoom = await room.save();
-
+        io.getIO().emit('room', {
+            action: 'create',
+            category: {
+                ...createdRoom._doc,
+                _id: createdRoom._id.toString(),
+            }
+        });
         return res.status(200).json({
             ...createdRoom._doc,
             _id: createdRoom._id.toString(),
@@ -296,6 +308,7 @@ router.post('/user_login', async (req, res, next) => {
         // }
 
 
+
         return res.status(200).json({
             token: accessToken,
             userId: user._id.toString(),
@@ -332,9 +345,15 @@ router.post('/sh_logout', async (req, res, next) => {
             throw error;
         }
 
-        await SH_Hotel_Token.findOneAndDelete({
-            sh_refresh_token: sh_refresh_token,
-            sh_user_id: req.userId,
+        // await SH_Hotel_Token.findOneAndDelete({
+        //     sh_refresh_token: sh_refresh_token,
+        //     sh_user_id: req.userId,
+        // });
+        io.getIO().emit('left_message', {
+            action: 'logout',
+            chat_left: {
+                message: userInformation.user_full_name + "has left the chat"
+            }
         });
         return res.status(200).json({ status: true })
     }
@@ -350,8 +369,8 @@ router.get('/messages/:room_Id', async (req, res, next) => {
         const errors = []
         const channelInformation = await Room_Channel.findById(room_Id);
         const messages = await Message.find({ room_information: channelInformation })
-        .populate("user_information")
-        .populate("room_information");
+            .populate("user_information")
+            .populate("room_information");
         if (!messages) {
             const error = new Error("No messages available at the moment. Please try again.");
             error.data = errors;
@@ -379,8 +398,8 @@ router.get('/message/:message_Id', async (req, res, next) => {
         const errors = []
         const { message_Id } = req.params;
         const messages = await Message.findById(message_Id)
-        .populate("user_information")
-        .populate("room_information");
+            .populate("user_information")
+            .populate("room_information");
         if (!messages) {
             const error = new Error("No message available at the moment. Please try again.");
             error.data = errors;
@@ -432,6 +451,13 @@ router.get('/room/:room_Id', async (req, res, next) => {
     try {
         const { room_Id } = req.params;
         const errors = []
+        const userInformation = await User.findById(req.userId);
+        if (!userInformation) {
+            const error = new Error("No user information available at the moment. Please try again.");
+            error.data = errors;
+            error.code = 400;
+            throw error;
+        }
         const channelInformation = await Message.findById(room_Id)
             .populate("message_information");
         if (!channelInformation) {
@@ -441,6 +467,12 @@ router.get('/room/:room_Id', async (req, res, next) => {
             throw error;
         }
 
+        io.getIO().emit('message', {
+            action: 'get',
+            room_welcome: {
+                message: "Hi" + userInformation.user_full_name + "Welcome to" + channelInformation.chat_channel_name + "."
+            }
+        });
         return res.status(200).json({
             ...channelInformation._doc,
             _id: channelInformation._id.toString(),
