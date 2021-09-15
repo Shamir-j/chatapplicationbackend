@@ -14,6 +14,7 @@ const mongoose = require('mongoose');
 const Message = require("../models/message");
 const User = require("../models/user");
 const Room_Channel = require("../models/rooms")
+const Session = require("../models/user_session")
 
 
 // Used to create user. Provide email address and password
@@ -201,13 +202,13 @@ router.post('/create_room', async (req, res, next) => {
     try {
         const errors = [];
 
-        // const userInformation = await User.findById(req.userId);
-        // if (userInformation) {
-        //     const error = new Error("Kindly login");
-        //     error.data = errors;
-        //     error.code = 400;
-        //     throw error;
-        // }
+        const userInformation = await User.findById(req.userId);
+        if (userInformation) {
+            const error = new Error("Kindly login");
+            error.data = errors;
+            error.code = 400;
+            throw error;
+        }
         const room = new Room_Channel({
             chat_channel_name: chat_channel_name,
             chat_channel_created_at: new Date(),
@@ -270,6 +271,12 @@ router.post('/user_login', async (req, res, next) => {
         //     error.code = 401;
         //     throw error;
         //   }
+        const newSession = new Session({
+            session_started_at: new Date(),
+            session_created_by: user.user_full_name,
+            user_information: user._id
+        });
+        await newSession.save();
         const accessToken = jwt.sign(
             {
                 userId: user._id.toString(),
@@ -300,10 +307,12 @@ router.post('/sh_logout', async (req, res, next) => {
             throw error;
         }
 
-        // await SH_Hotel_Token.findOneAndDelete({
-        //     sh_refresh_token: sh_refresh_token,
-        //     sh_user_id: req.userId,
-        // });
+        const newSession = new Session({
+            session_ended_at: new Date(),
+            user_information: userInformation
+        });
+        await newSession.save();
+
         io.getIO().emit('left_message', {
             action: 'logout',
             chat_left: {

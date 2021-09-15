@@ -31,7 +31,7 @@ https://realtimechatappbackend.herokuapp.com/
 <li> User are required to sign up. Due to the minimal version of the application. account verification has been left oiptional no need for a verified account</li>
 <li> Ones the user log in a token is made vailable to them to allow them to be able to interact with the server.</li>
 <li> Only logged in accounts will be allowed to chat on the server</li>
-<li> The server logs all activity of the user on the database in the table called Logs and also using morgan thrid party service to logg user acctivities.</li>
+<li> The server logs all activity of the user on the database in the table called systemLogs and also using morgan thrid party service to logg user acctivities.</li>
 <li> Seesion loggs of the user start and endtime are also saved in the db. In the table called User_Session. When a user logs in a termstamp is recorded as logged in when they log out the seesion of the user ends and the record is updated in the databse</li>
 <li> User can only exist in one room at a time before selecting another</li>
 <li> Message of user/customer are saved in the table schema called Messages, Users accounts are stored in the databse as Users</li>
@@ -72,7 +72,24 @@ $ npm run start:dev      #run the app
 
 
 
-Click [here](https://realtimechatappbackend.herokuapp.com/) for testing Graphql Server
+Click [here](https://realtimechatappbackend.herokuapp.com/) for testing server
+
+### Available EndPoints
+
+
+<ul>
+<li>https://realtimechatappbackend.herokuapp.com/create_user</li>
+<li>https://realtimechatappbackend.herokuapp.com/create_message/:room_Id</li>
+<li>https://realtimechatappbackend.herokuapp.com/create_room</li>
+<li>https://realtimechatappbackend.herokuapp.com/user_login</li>
+<li>https://realtimechatappbackend.herokuapp.com/sh_logout</li>
+<li>https://realtimechatappbackend.herokuapp.com/messages/:room_Id</li>
+<li>https://realtimechatappbackend.herokuapp.com/message/:message_Id</li>
+<li>https://realtimechatappbackend.herokuapp.com/all_rooms</li>
+<li>https://realtimechatappbackend.herokuapp.com/room/:room_Id</li>
+<li>https://realtimechatappbackend.herokuapp.com/all_users</li>
+<li>https://realtimechatappbackend.herokuapp.com/user/:user_Id</li>
+</ul>
 
 
 Have Fun!
